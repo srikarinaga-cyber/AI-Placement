@@ -1,6 +1,6 @@
 export const appData = {
   // Roadmaps generator helper
-  getRoadmap: (branch, level, goal, duration) => {
+  getRoadmap: (branch: string, level: string, goal: string, duration: string) => {
     const durationWeeks = parseInt(duration) * 4;
     const phases = [];
     
