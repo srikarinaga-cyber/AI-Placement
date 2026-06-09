@@ -1,0 +1,627 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="meta-title">AI Placement Mentor - Tier-2 & Tier-3 Students</title>
+  <meta name="description" content="AI-powered personalized placement mentor for Tier-2 and Tier-3 Indian engineering & degree students. Features coding roadmaps, mock interviews, skill gap analysis, and Telugu regional language support.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside class="sidebar" id="app-sidebar">
+    <div class="brand">
+      <div class="brand-icon">🎓</div>
+      <div class="brand-name">AI Mentor</div>
+    </div>
+    
+    <nav class="menu">
+      <a class="menu-item active" id="nav-dashboard" onclick="switchTab('dashboard')">
+        <span class="menu-item-icon">📊</span>
+        <span class="menu-text" data-tr="dashboard">Dashboard</span>
+      </a>
+      <a class="menu-item" id="nav-roadmap" onclick="switchTab('roadmap')">
+        <span class="menu-item-icon">🗺️</span>
+        <span class="menu-text" data-tr="roadmap">Roadmap Generator</span>
+      </a>
+      <a class="menu-item" id="nav-resumeBuilder" onclick="switchTab('resumeBuilder')">
+        <span class="menu-item-icon">📝</span>
+        <span class="menu-text" data-tr="resumeBuilder">Resume Builder</span>
+      </a>
+      <a class="menu-item" id="nav-mockInterview" onclick="switchTab('mockInterview')">
+        <span class="menu-item-icon">💬</span>
+        <span class="menu-text" data-tr="mockInterview">AI Mock Interview</span>
+      </a>
+      <a class="menu-item" id="nav-aptitudeArena" onclick="switchTab('aptitudeArena')">
+        <span class="menu-item-icon">🧩</span>
+        <span class="menu-text" data-tr="aptitudeArena">Aptitude Arena</span>
+      </a>
+      <a class="menu-item" id="nav-skillGap" onclick="switchTab('skillGap')">
+        <span class="menu-item-icon">⚡</span>
+        <span class="menu-text" data-tr="skillGap">Skill Gap Quiz</span>
+      </a>
+      <a class="menu-item" id="nav-projects" onclick="switchTab('projects')">
+        <span class="menu-item-icon">📁</span>
+        <span class="menu-text" data-tr="projects">Project Guide</span>
+      </a>
+      <a class="menu-item" id="nav-jobBoard" onclick="switchTab('jobBoard')">
+        <span class="menu-item-icon">💼</span>
+        <span class="menu-text" data-tr="jobBoard">Job Alerts</span>
+      </a>
+      <a class="menu-item" id="nav-tracker" onclick="switchTab('tracker')">
+        <span class="menu-item-icon">🔥</span>
+        <span class="menu-text" data-tr="tracker">Streak Tracker</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="avatar">SA</div>
+        <div class="profile-info">
+          <div class="profile-name">Sai Kumar</div>
+          <div class="profile-role" id="profile-sub-role">B.Sc AI & ML Student</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="content-area">
+    
+    <!-- Top Control Bar -->
+    <header class="top-bar">
+      <div class="header-title-sec">
+        <h1 id="page-main-title">AI Placement Mentor</h1>
+        <p id="page-sub-title" data-tr="tagline">Your personalized guide to placement success, tailored for Tier-2 & Tier-3 students.</p>
+      </div>
+      
+      <div class="controls-group">
+        <button class="btn-control btn-lang" id="lang-toggle-btn" onclick="toggleLanguage()">
+          🌐 <span id="lang-btn-text">తెలుగు</span>
+        </button>
+        <button class="btn-control" id="theme-toggle-btn" onclick="toggleTheme()">
+          🌓 Theme
+        </button>
+      </div>
+    </header>
+
+    <!-- VIEWS CONTAINER -->
+    <div id="views-container">
+      
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="view-dashboard" class="tab-view active-view">
+        <div class="dashboard-grid">
+          <!-- Streak Widget -->
+          <div class="card-glass widget-card">
+            <div class="widget-header">
+              <span class="widget-label" data-tr="currentStreak">Current Streak</span>
+              <span class="widget-icon">🔥</span>
+            </div>
+            <div class="widget-value"><span id="dash-streak-count">5</span> <span style="font-size:1.2rem; font-weight:500;" data-tr="days">days</span></div>
+            <div class="widget-footer">Keep the momentum going!</div>
+          </div>
+          <!-- Progress Widget -->
+          <div class="card-glass widget-card accent">
+            <div class="widget-header">
+              <span class="widget-label" data-tr="overallProgress">Overall Placement Readiness</span>
+              <span class="widget-icon">📈</span>
+            </div>
+            <div class="widget-value"><span id="dash-readiness-percent">45</span>%</div>
+            <div class="widget-footer">Target: 80% to start applying</div>
+          </div>
+          <!-- Daily Target Widget -->
+          <div class="card-glass widget-card success">
+            <div class="widget-header">
+              <span class="widget-label" data-tr="dailyTarget">Daily Target</span>
+              <span class="widget-icon">🎯</span>
+            </div>
+            <div class="widget-value"><span id="dash-completed-habits">2</span>/5</div>
+            <div class="widget-footer" id="dash-habit-subtext">Completed tasks today</div>
+          </div>
+        </div>
+
+        <div class="split-layout" style="margin-top: 1.5rem;">
+          <!-- Active Daily Focus -->
+          <div class="card-glass">
+            <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;" data-tr="activeGoals">Today's Focus Tasks</h2>
+            <div class="habit-checkbox-list" id="dashboard-checklist">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Quick Actions & Motivation -->
+          <div class="card-glass" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;" data-tr="motivationalQuote">Daily Wisdom</h2>
+              <p id="motivational-quote-text" style="font-style: italic; line-height: 1.6; color: var(--text-secondary);">
+                "Small daily improvements over time lead to stunning results. Stay consistent!"
+              </p>
+              <p id="motivational-quote-author" style="text-align: right; margin-top: 0.5rem; font-weight: 600; color: var(--accent-color);">
+                - Robin Sharma
+              </p>
+            </div>
+            
+            <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+              <button class="btn-primary" onclick="switchTab('roadmap')" style="width: 100%; text-align: center; justify-content: center; align-self: auto;" data-tr="roadmap">Roadmap Generator</button>
+              <button class="btn-primary" onclick="switchTab('mockInterview')" style="width: 100%; text-align: center; justify-content: center; align-self: auto; background: linear-gradient(135deg, var(--accent-color), var(--primary-color))" data-tr="mockInterview">AI Mock Interview</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ROADMAP VIEW -->
+      <section id="view-roadmap" class="tab-view" style="display: none;">
+        <div class="card-glass">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="roadmapTitle">Generate Your Personalized Roadmap</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="roadmapSub">Get a step-by-step preparation plan tailored to your profile.</p>
+          
+          <div class="roadmap-form">
+            <div class="form-group">
+              <label class="form-label" data-tr="selectBranch">Select Your Branch</label>
+              <select class="form-select" id="roadmap-branch">
+                <option value="aiml">B.Sc AI & ML / Data Science</option>
+                <option value="cse">CSE / IT / MCA</option>
+                <option value="ece">ECE / EEE</option>
+                <option value="mech_civil">Mechanical / Civil / Others</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-tr="selectLevel">Your Current Technical Level</label>
+              <select class="form-select" id="roadmap-level">
+                <option value="beginner" data-tr="beginner">Beginner (No coding experience)</option>
+                <option value="intermediate" data-tr="intermediate">Intermediate (Know basics, simple code)</option>
+                <option value="advanced" data-tr="advanced">Advanced (Can solve DSA, build projects)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-tr="selectGoal">Your Career Goal</label>
+              <select class="form-select" id="roadmap-goal">
+                <option value="product" data-tr="productBased">Product Startups & Mid-scale Companies</option>
+                <option value="service" data-tr="serviceBased">Service Companies (TCS, Infosys, Wipro)</option>
+                <option value="faang" data-tr="faangLevel">FAANG / High-Growth Companies</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-tr="selectDuration">Preparation Duration</label>
+              <select class="form-select" id="roadmap-duration">
+                <option value="3" data-tr="months3">3 Months (Fast Track)</option>
+                <option value="6" data-tr="months6">6 Months (Balanced)</option>
+                <option value="12" data-tr="months12">12 Months (Comprehensive)</option>
+              </select>
+            </div>
+            
+            <button class="btn-primary" onclick="generateUserRoadmap()" data-tr="generateRoadmap">Generate Placement Roadmap</button>
+          </div>
+        </div>
+
+        <div id="generated-roadmap-section" style="margin-top: 1.5rem;">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- NEW: 3. RESUME BUILDER VIEW -->
+      <section id="view-resumeBuilder" class="tab-view" style="display: none;">
+        <div class="resume-grid">
+          <!-- Inputs panel -->
+          <div class="card-glass resume-form-panel">
+            <h2 style="margin-bottom: 0.5rem;" data-tr="resumeBuilder">Resume Builder</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="resumeSub">Build and evaluate an ATS-ready resume with real-time feedback.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" data-tr="fullName">Full Name</label>
+                <input type="text" class="form-input" id="res-in-name" value="Sai Kumar" oninput="updateResumePreview()">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="email">Email Address</label>
+                <input type="email" class="form-input" id="res-in-email" value="saikumar@gmail.com" oninput="updateResumePreview()">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="phone">Phone Number</label>
+                <input type="text" class="form-input" id="res-in-phone" value="+91 9876543210" oninput="updateResumePreview()">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="education">Education Details</label>
+                <input type="text" class="form-input" id="res-in-education" value="B.Sc AI & ML, Tier-3 Degree College (2023 - 2026)" oninput="updateResumePreview()">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="skillsList">Technical Skills (comma separated)</label>
+                <input type="text" class="form-input" id="res-in-skills" value="Python, SQL, HTML, CSS, JavaScript" oninput="updateResumePreview()">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="projectsDesc">Project Description & Achievements</label>
+                <textarea class="form-textarea" id="res-in-project" oninput="updateResumePreview()">Student Placement Dashboard: Built dynamic application forms using HTML/CSS & JS local storage saving student data. Increased search speed by 40%.</textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-tr="experience">Work Experience / Internships</label>
+                <textarea class="form-textarea" id="res-in-experience" oninput="updateResumePreview()">Web Developer Intern at Local Startup: Built responsive interfaces, handled MySQL databases, and improved load times by 20%.</textarea>
+              </div>
+              
+              <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button class="btn-primary" style="flex-grow: 1;" onclick="evaluateResumeATS()" data-tr="runAIEvaluation">Analyze Resume (AI Review)</button>
+                <button class="btn-primary" style="flex-grow: 1; background: linear-gradient(135deg, var(--accent-color), var(--primary-color))" onclick="window.print()" data-tr="printResume">Print / Save PDF Resume</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview panel -->
+          <div>
+            <div class="resume-preview-sheet">
+              <div class="res-header">
+                <div class="res-name" id="res-out-name">Sai Kumar</div>
+                <div class="res-contacts">
+                  <span id="res-out-email">saikumar@gmail.com</span>
+                  <span>•</span>
+                  <span id="res-out-phone">+91 9876543210</span>
+                </div>
+              </div>
+
+              <div class="res-section">
+                <div class="res-section-title" data-tr="education">Education Details</div>
+                <div class="res-content-item">
+                  <div class="res-item-title-row">
+                    <span id="res-out-education">B.Sc AI & ML, Tier-3 Degree College</span>
+                    <span style="font-size: 0.85rem; color: #475569;">2023 - 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="res-section">
+                <div class="res-section-title">Technical Skills</div>
+                <div class="res-content-item">
+                  <div class="res-item-desc" id="res-out-skills">Python, SQL, HTML, CSS, JavaScript</div>
+                </div>
+              </div>
+
+              <div class="res-section">
+                <div class="res-section-title">Projects</div>
+                <div class="res-content-item">
+                  <div class="res-item-title-row">
+                    <span>Placement Dashboard Project</span>
+                  </div>
+                  <div class="res-item-desc" id="res-out-project">Student Placement Dashboard: Built dynamic application forms using HTML/CSS & JS local storage saving student data. Increased search speed by 40%.</div>
+                </div>
+              </div>
+
+              <div class="res-section">
+                <div class="res-section-title">Experience</div>
+                <div class="res-content-item">
+                  <div class="res-item-title-row">
+                    <span>Web Developer Intern</span>
+                  </div>
+                  <div class="res-item-desc" id="res-out-experience">Web Developer Intern at Local Startup: Built responsive interfaces, handled MySQL databases, and improved load times by 20%.</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ATS Review Result Card -->
+            <div class="ats-score-box" id="ats-scorecard" style="display: none;">
+              <div>
+                <strong data-tr="atsScore">ATS AI Review Score</strong>
+                <div style="font-size: 2.2rem; font-weight: 700; color: var(--accent-color); margin-top: 0.25rem;"><span id="ats-score-num">75</span>/100</div>
+              </div>
+              <div style="flex-grow: 1; margin-left: 1.5rem;">
+                <strong style="font-size: 0.9rem;">Suggestions to improve / మెరుగుపరచాల్సినవి:</strong>
+                <ul id="ats-suggestions" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem; padding-left: 1rem; line-height: 1.5;">
+                  <li>Add metric percentages in your internship work details.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. MOCK INTERVIEW VIEW -->
+      <section id="view-mockInterview" class="tab-view" style="display: none;">
+        <div class="card-glass" id="interview-setup-panel">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="interviewTitle">AI Mock Interview Arena</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="interviewSub">Practice HR and Technical rounds. Speak or type your answers to get instant, actionable feedback.</p>
+          
+          <div class="interview-config">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+            <h3 style="margin-bottom: 1rem;" data-tr="selectRound">Select Interview Type</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px;">
+              <button class="btn-control" style="justify-content: center; padding: 1rem;" onclick="startInterviewSession('technical')" data-tr="technicalRound">Technical Interview (DSA, OOPs, Web)</button>
+              <button class="btn-control" style="justify-content: center; padding: 1rem;" onclick="startInterviewSession('hr')" data-tr="hrRound">HR Interview (Behavioral, Culture Fit)</button>
+              <button class="btn-control" style="justify-content: center; padding: 1rem;" onclick="startInterviewSession('aiml')" data-tr="aiMLRound">AI/ML Engineer Interview (Python, ML models)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVE CHAT ARENA -->
+        <div class="chat-arena" id="interview-chat-arena" style="display: none;">
+          <div class="chat-header">
+            <div class="chat-agent-info">
+              <div class="chat-agent-status"></div>
+              <div>
+                <strong id="interviewer-role-name">AI Technical Recruiter</strong>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);" id="interviewer-subtitle">Evaluation Mode Active</div>
+              </div>
+            </div>
+            <button class="btn-control" style="padding: 0.4rem 0.8rem; background: var(--error-color); border: none; color: white;" onclick="endInterviewSession()" data-tr="endSession">End Interview & Get Report</button>
+          </div>
+          
+          <div class="chat-messages" id="chat-messages-container">
+            <!-- Messages added dynamically -->
+          </div>
+
+          <div class="chat-typing" id="interviewer-typing-indicator" style="display: none; padding: 0.5rem 1.5rem;">
+            <span data-tr="interviewerTyping">Interviewer is analyzing your response...</span>
+            <div style="display: flex; gap: 3px;">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <textarea class="chat-input" id="candidate-chat-input" placeholder="Type your answer here... (Tip: You can answer in English, Telugu, or both!)" onkeydown="handleChatSubmit(event)"></textarea>
+            <button class="btn-send" onclick="submitCandidateAnswer()">
+              ✈️
+            </button>
+          </div>
+        </div>
+
+        <!-- INTERVIEW REPORT PANEL -->
+        <div class="card-glass interview-report" id="interview-report-panel" style="display: none;">
+          <h2 data-tr="gapScorecard">Placement Readiness Gap Scorecard</h2>
+          
+          <div class="report-score-box">
+            <div class="widget-label" data-tr="feedbackScore">Interview Score</div>
+            <div class="report-score-num"><span id="report-score-val">8.2</span>/10</div>
+            <p id="report-overall-summary" style="margin-top: 0.5rem; font-weight: 500;"></p>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">🛡️ <span data-tr="feedbackTechnical">Technical Performance</span></div>
+            <p id="report-tech-feedback" style="line-height: 1.6; color: var(--text-secondary);"></p>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">🗣️ <span data-tr="feedbackComm">Communication Skills</span></div>
+            <p id="report-comm-feedback" style="line-height: 1.6; color: var(--text-secondary);"></p>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">💡 <span data-tr="feedbackImprovement">Areas to Improve</span></div>
+            <p id="report-improve-feedback" style="line-height: 1.6; color: var(--text-secondary);"></p>
+          </div>
+
+          <button class="btn-primary" onclick="restartMockInterview()" style="align-self: center;" data-tr="backToDashboard">Go to Dashboard</button>
+        </div>
+      </section>
+
+      <!-- NEW: 5. APTITUDE ARENA VIEW -->
+      <section id="view-aptitudeArena" class="tab-view" style="display: none;">
+        <div class="card-glass aptitude-arena-card">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="aptitudeArena">Aptitude Arena</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="aptitudeSub">Learn and practice aptitude concepts with simple Telugu explanations.</p>
+          
+          <div class="topic-selector-tabs">
+            <button class="filter-btn active" id="apt-tab-percentages" onclick="switchAptitudeCategory('percentages')">Percentages (శాతాలు)</button>
+            <button class="filter-btn" id="apt-tab-time_work" onclick="switchAptitudeCategory('time_work')">Time & Work (పని-సమయం)</button>
+            <button class="filter-btn" id="apt-tab-logical" onclick="switchAptitudeCategory('logical')">Logical Reasoning (రీజనింగ్)</button>
+          </div>
+
+          <div class="quiz-question-card" id="aptitude-card-content" style="margin-top: 2rem;">
+            <div class="quiz-question-text" id="apt-question-text">Question loading...</div>
+            <div class="quiz-options-list" id="apt-options-container">
+              <!-- Rendered via JS -->
+            </div>
+            
+            <button class="btn-control" id="apt-show-sol-btn" style="margin-top: 1.5rem; display: none;" onclick="showAptitudeSolution()" data-tr="showSolution">Show Explanation</button>
+            
+            <div class="solution-box" id="apt-solution-box" style="display: none;">
+              <!-- Solution text -->
+            </div>
+          </div>
+          
+          <button class="btn-primary" id="apt-next-btn" style="display: none; align-self: flex-end; margin-top: 1rem;" onclick="nextAptitudeQuestion()" data-tr="nextQuestion">Next Question</button>
+        </div>
+      </section>
+
+      <!-- 6. SKILL GAP QUIZ VIEW -->
+      <section id="view-skillGap" class="tab-view" style="display: none;">
+        <div class="card-glass" id="quiz-intro-panel">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="skillGapTitle">Placement Skill Gap Analyzer</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="skillGapSub">Test yourself in Coding, Quantitative Aptitude, and English Communication to find your gaps.</p>
+          
+          <div style="text-align: center; padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+            <p style="margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; color: var(--text-secondary);">
+              This analyzer quiz consists of 5 multiple-choice questions covering core syllabus areas required by top placement recruiters. Your gaps will be automatically diagnosed upon submission.
+            </p>
+            <button class="btn-primary" onclick="startSkillGapQuiz()" data-tr="startQuiz">Start Assessment Quiz</button>
+          </div>
+        </div>
+
+        <!-- QUIZ ACTIVE PANEL -->
+        <div class="card-glass quiz-container" id="quiz-active-panel" style="display: none;">
+          <div class="quiz-progress-info">
+            <span id="quiz-section-label">Section: Coding</span>
+            <span id="quiz-question-number">Question 1 of 5</span>
+          </div>
+          
+          <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="quiz-progress-bar" style="width: 20%;"></div>
+          </div>
+
+          <div class="quiz-question-card">
+            <div class="quiz-question-text" id="quiz-question-text-el">Which data structure operates on a LIFO principle?</div>
+            <div class="quiz-options-list" id="quiz-options-container">
+              <!-- Options injected here -->
+            </div>
+            
+            <div class="quiz-explanation" id="quiz-explanation-el" style="display: none;">
+              <!-- Explanation injected here -->
+            </div>
+          </div>
+
+          <button class="btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display: none; align-self: flex-end;">Next Question</button>
+        </div>
+
+        <!-- REPORT GAP PANEL -->
+        <div class="card-glass interview-report" id="quiz-report-panel" style="display: none;">
+          <h2 data-tr="gapScorecard">Placement Readiness Gap Scorecard</h2>
+          
+          <div class="report-score-box">
+            <div class="widget-label">Quiz Accuracy</div>
+            <div class="report-score-num"><span id="quiz-score-val">60</span>%</div>
+            <p id="quiz-overall-summary" style="margin-top: 0.5rem; font-weight: 500;"></p>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">✅ <span data-tr="strengths">Your Key Strengths</span></div>
+            <ul id="quiz-strengths-list" style="margin-left: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
+              <!-- Strengths -->
+            </ul>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">⚠️ <span data-tr="weaknesses">Skill Gaps Identified</span></div>
+            <ul id="quiz-gaps-list" style="margin-left: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
+              <!-- Gaps -->
+            </ul>
+          </div>
+
+          <div class="report-section">
+            <div class="report-section-title">🛠️ <span data-tr="actionPlan">Recommended Actions to Bridge Gaps</span></div>
+            <ul id="quiz-actions-list" style="margin-left: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
+              <!-- Actions -->
+            </ul>
+          </div>
+
+          <button class="btn-primary" onclick="restartSkillGapQuiz()" style="align-self: center;">Retake Quiz</button>
+        </div>
+      </section>
+
+      <!-- 7. PROJECTS VIEW -->
+      <section id="view-projects" class="tab-view" style="display: none;">
+        <div class="card-glass">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="projectsTitle">Placement-Ready Projects</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="projectsSub">Build hands-on projects that recruiters actually care about. Select your stack below.</p>
+          
+          <div class="projects-filter-bar">
+            <button class="filter-btn active" onclick="filterProjects('all')" data-tr="all">All Domains</button>
+            <button class="filter-btn" onclick="filterProjects('webDev')" data-tr="webDev">Web Development</button>
+            <button class="filter-btn" onclick="filterProjects('aiml')" data-tr="aiml">AI & Machine Learning</button>
+          </div>
+
+          <div class="projects-grid" id="projects-grid-container">
+            <!-- Dynamic Project Cards -->
+          </div>
+        </div>
+
+        <!-- PROJECT DETAIL MODAL -->
+        <div class="project-guide-modal" id="project-modal" onclick="closeProjectModal(event)">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="toggleModal(false)">✕</button>
+            <h2 id="modal-project-title" style="color: var(--accent-color); margin-bottom: 0.5rem;">Project Title</h2>
+            <div class="project-stack" id="modal-project-stack">HTML, CSS, JS</div>
+            
+            <div style="margin: 1.25rem 0;">
+              <h4 style="margin-bottom: 0.5rem;" data-tr="difficulty">Difficulty:</h4>
+              <span id="modal-project-difficulty" class="project-difficulty-tag Intermediate">Intermediate</span>
+            </div>
+
+            <div style="margin: 1.25rem 0;">
+              <h4 style="margin-bottom: 0.5rem;">Project Summary / ప్రాజెక్ట్ సారాంశం:</h4>
+              <p id="modal-project-summary" style="color: var(--text-secondary); line-height: 1.6;"></p>
+            </div>
+
+            <div style="margin: 1.25rem 0;">
+              <h4 style="margin-bottom: 0.5rem;">Why this is useful for placements / ప్లేస్‌మెంట్స్ కి ఇది ఎలా ఉపయోగపడుతుంది:</h4>
+              <p id="modal-project-why" style="color: var(--text-secondary); line-height: 1.6;"></p>
+            </div>
+
+            <div style="margin: 1.25rem 0;">
+              <h4 style="margin-bottom: 0.5rem;">Step-by-Step Implementation Guide / ఎలా నిర్మించాలో గైడ్:</h4>
+              <ol id="modal-project-guide-steps" style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.6; display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Steps -->
+              </ol>
+            </div>
+
+            <div style="margin: 1.25rem 0;">
+              <h4 style="margin-bottom: 0.25rem;">Reference Code Snippet:</h4>
+              <pre class="code-block"><code id="modal-project-code"></code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEW: 8. JOB ALERTS VIEW -->
+      <section id="view-jobBoard" class="tab-view" style="display: none;">
+        <div class="card-glass">
+          <h2 style="margin-bottom: 0.5rem;" data-tr="jobBoard">Job Alerts</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="jobSub">Latest off-campus job alerts for freshers and graduates.</p>
+          
+          <div class="job-alerts-grid" id="job-alerts-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. TRACKER VIEW -->
+      <section id="view-tracker" class="tab-view" style="display: none;">
+        <div class="split-layout">
+          <!-- Habits tracker checklist -->
+          <div class="card-glass">
+            <h2 style="margin-bottom: 0.5rem;" data-tr="trackerTitle">Daily Consistency Tracker</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;" data-tr="trackerSub">Placements are won by small daily habits. Maintain your streak to stay motivated.</p>
+            
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;" data-tr="habitList">Daily Habit Checklist</h3>
+            <div class="habit-checkbox-list" id="tracker-habit-list">
+              <!-- Habit items -->
+            </div>
+          </div>
+
+          <!-- Streak Calendar heatmap -->
+          <div class="card-glass" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;" data-tr="streakBoard">Consistency Grid (Last 30 Days)</h2>
+              <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">Clicking a grid cell simulates filling work history for that day.</p>
+              
+              <div class="heatmap-container">
+                <div class="heatmap-grid" id="heatmap-grid-container">
+                  <!-- Heatmap days rendered via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Total Active Days</div>
+                <div style="font-size: 1.75rem; font-weight: 700; color: var(--accent-color);" id="tracker-active-days-count">18/30</div>
+              </div>
+              <div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Current Streak</div>
+                <div style="font-size: 1.75rem; font-weight: 700; color: var(--success-color);"><span id="tracker-streak-count">5</span> Days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Global Footer -->
+    <footer style="margin-top: auto; padding-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color);">
+      &copy; 2026 AI Placement Mentor. Created for Tier-2 & Tier-3 Students in India. Supporting Local Languages.
+    </footer>
+
+  </main>
+
+  <!-- Toast Toast Notification Element -->
+  <div id="toast-notif" class="toast-msg">✓ Applied Successfully!</div>
+
+  <!-- Load Scripts -->
+  <script src="languages.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
