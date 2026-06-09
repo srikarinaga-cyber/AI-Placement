@@ -1,5 +1,4 @@
-// data.js
-const appData = {
+export const appData = {
   // Roadmaps generator helper
   getRoadmap: (branch, level, goal, duration) => {
     const durationWeeks = parseInt(duration) * 4;
@@ -411,7 +410,3 @@ const appData = {
     }
   ]
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = appData;
-}

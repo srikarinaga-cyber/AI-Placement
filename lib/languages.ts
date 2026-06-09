@@ -1,5 +1,6 @@
-// languages.js
-const translations = {
+export type Lang = "en" | "te";
+
+export const translations: Record<Lang, Record<string, string>> = {
   en: {
     appName: "AI Placement Mentor",
     tagline: "Your personalized guide to placement success, tailored for Tier-2 & Tier-3 students.",
@@ -201,7 +202,3 @@ const translations = {
     applied: "✓ అప్లై చేయడం విజయవంతమైంది"
   }
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = translations;
-}
