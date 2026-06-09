@@ -1183,3 +1183,33 @@ function toggleModal(isOpen) {
 function closeProjectModal(e) {
   toggleModal(false);
 }
+
+// Expose handlers globally so inline onclick works on static hosts (e.g. Vercel).
+Object.assign(window, {
+  toggleTheme,
+  toggleLanguage,
+  switchTab,
+  toggleHabit,
+  toggleHeatmapCell,
+  generateUserRoadmap,
+  toggleRoadmapTask,
+  updateResumePreview,
+  evaluateResumeATS,
+  switchAptitudeCategory,
+  selectAptitudeOption,
+  showAptitudeSolution,
+  nextAptitudeQuestion,
+  applyToJob,
+  startInterviewSession,
+  endInterviewSession,
+  submitCandidateAnswer,
+  restartMockInterview,
+  startSkillGapQuiz,
+  selectQuizOption,
+  nextQuizQuestion,
+  restartSkillGapQuiz,
+  filterProjects,
+  openProjectModal,
+  toggleModal,
+  closeProjectModal
+});
