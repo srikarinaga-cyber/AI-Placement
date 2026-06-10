@@ -1,6 +1,11 @@
-export type Lang = "en" | "te";
+import type { Lang } from "./languageMeta";
+import { regionalTranslations } from "./regionalTranslations";
 
-export const translations: Record<Lang, Record<string, string>> = {
+export type { Lang } from "./languageMeta";
+export { LANG_OPTIONS, BRANCH_OPTIONS } from "./languageMeta";
+export type { Branch } from "./languageMeta";
+
+export const translations: Record<"en" | "te", Record<string, string>> = {
   en: {
     appName: "AI Placement Mentor",
     tagline: "Your personalized guide to placement success, tailored for Tier-2 & Tier-3 students.",
@@ -25,7 +30,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     completed: "Completed",
     pending: "Pending",
     activeGoals: "Today's Focus Tasks",
-    toggleLanguage: "తెలుగు",
+    toggleLanguage: "Language",
     roadmapTitle: "Generate Your Personalized Roadmap",
     roadmapSub: "Get a step-by-step preparation plan tailored to your profile.",
     selectBranch: "Select Your Branch",
@@ -99,7 +104,13 @@ export const translations: Record<Lang, Record<string, string>> = {
     showSolution: "Show Explanation",
     nextQuestion: "Next Question",
     applyNow: "Apply Now",
-    applied: "✓ Applied Successfully"
+    applied: "✓ Applied Successfully",
+    selectLanguage: "Select Language",
+    branchAiml: "B.Sc AI & ML / Data Science",
+    branchCse: "CSE / IT / MCA",
+    branchEce: "ECE / EEE",
+    branchMech: "Mechanical / Civil / Others",
+    selectCourseForInterview: "Select Your Course / Subject"
   },
   te: {
     appName: "AI ప్లేస్‌మెంట్ మెంటర్",
@@ -126,6 +137,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     pending: "పెండింగ్",
     activeGoals: "నేటి ముఖ్యమైన పనులు",
     toggleLanguage: "English",
+    selectLanguage: "భాషను ఎంచుకోండి",
+    branchAiml: "B.Sc AI & ML / డేటా సైన్స్",
+    branchCse: "CSE / IT / MCA",
+    branchEce: "ECE / EEE",
+    branchMech: "మెకానికల్ / సివిల్ / ఇతర",
+    selectCourseForInterview: "మీ కోర్స్ / విషయం ఎంచుకోండి",
     roadmapTitle: "మీ వ్యక్తిగత రోడ్‌మ్యాప్‌ను సృష్టించండి",
     roadmapSub: "మీ నైపుణ్యాల ఆధారంగా ఒక స్పష్టమైన ప్రిపరేషన్ ప్లాన్ పొందండి.",
     selectBranch: "మీ బ్రాంచ్ ఎంచుకోండి",
@@ -199,6 +216,13 @@ export const translations: Record<Lang, Record<string, string>> = {
     showSolution: "వివరణ చూడండి",
     nextQuestion: "తదుపరి ప్రశ్న",
     applyNow: "అప్లై చేయండి",
-    applied: "✓ అప్లై చేయడం విజయవంతమైంది"
+    applied: "✓ అప్లై చేయడం విజయవంతమైంది",
+    selectCourseForInterview: "మీ కోర్స్ / విషయం ఎంచుకోండి"
   }
 };
+
+export function translate(lang: Lang, key: string): string {
+  if (lang === "en") return translations.en[key] ?? key;
+  if (lang === "te") return translations.te[key] ?? translations.en[key] ?? key;
+  return regionalTranslations[lang]?.[key] ?? translations.en[key] ?? key;
+}

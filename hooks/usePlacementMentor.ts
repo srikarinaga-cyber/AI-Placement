@@ -2,18 +2,24 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { appData } from "@/lib/data";
-import { translations, type Lang } from "@/lib/languages";
+import { translate, type Lang } from "@/lib/languages";
+import type { Branch } from "@/lib/languageMeta";
+import {
+  getInterviewQuestions,
+  getAvailableInterviewTypes,
+  getInterviewerTitle,
+  type InterviewType,
+} from "@/lib/interviewQuestions";
 import {
   INITIAL_HABITS,
   INITIAL_HEATMAP,
   quotes,
-  getInterviewerTitle,
   getPageHeader,
   type TabId,
 } from "@/lib/constants";
 
 type Job = (typeof appData.jobAlerts)[number] & { applied: boolean };
-type ChatMsg = { sender: "interviewer" | "candidate"; text: string; textTe?: string };
+type ChatMsg = { sender: "interviewer" | "candidate"; text: string; textLocal?: string };
 type RoadmapPhase = ReturnType<typeof appData.getRoadmap>[number];
 type AtsSuggestion = { en: string; te: string };
 
@@ -53,7 +59,8 @@ export function usePlacementMentor() {
   const [aptitudeAnswer, setAptitudeAnswer] = useState<number | null>(null);
   const [showAptSolution, setShowAptSolution] = useState(false);
   const [interviewActive, setInterviewActive] = useState(false);
-  const [interviewType, setInterviewType] = useState<string | null>(null);
+  const [interviewBranch, setInterviewBranch] = useState<Branch>("aiml");
+  const [interviewType, setInterviewType] = useState<InterviewType | null>(null);
   const [interviewIdx, setInterviewIdx] = useState(0);
   const [chatLog, setChatLog] = useState<ChatMsg[]>([]);
   const [interviewScores, setInterviewScores] = useState<number[]>([]);
@@ -65,7 +72,7 @@ export function usePlacementMentor() {
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizSelected, setQuizSelected] = useState<number | null>(null);
 
-  const t = useCallback((key: string) => translations[lang][key] ?? key, [lang]);
+  const t = useCallback((key: string) => translate(lang, key), [lang]);
   const pageHeader = useMemo(() => getPageHeader(activeTab, lang, t), [activeTab, lang, t]);
 
   const aptitudeQuestions = useMemo(
@@ -101,8 +108,14 @@ export function usePlacementMentor() {
   }, [theme]);
 
   useEffect(() => {
-    document.title = `${translations[lang].appName} - Placements Guide`;
-  }, [lang]);
+    document.documentElement.setAttribute("data-lang", lang);
+    document.documentElement.setAttribute("data-branch", interviewBranch);
+    document.title = `${translate(lang, "appName")} - Placements Guide`;
+  }, [lang, interviewBranch]);
+
+  useEffect(() => {
+    setInterviewBranch(roadmapForm.branch as Branch);
+  }, [roadmapForm.branch]);
 
   useEffect(() => {
     if (!toast) return;
@@ -113,7 +126,7 @@ export function usePlacementMentor() {
   const showToastMsg = (msg: string) => setToast(msg);
 
   const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  const toggleLanguage = () => setLang((prev) => (prev === "en" ? "te" : "en"));
+  const setLanguage = (code: Lang) => setLang(code);
   const switchTab = (tabId: TabId) => setActiveTab(tabId);
 
   const toggleHabit = (idx: number) => {
@@ -219,7 +232,9 @@ export function usePlacementMentor() {
     if (job) showToastMsg(lang === "en" ? `Applied to ${job.company} successfully!` : `${job.company} కి విజయవంతంగా అప్లై చేసారు!`);
   };
 
-  const startInterviewSession = (type: string) => {
+  const startInterviewSession = (type: InterviewType) => {
+    const questions = getInterviewQuestions(type, interviewBranch);
+    if (!questions.length) return;
     setInterviewActive(true);
     setInterviewType(type);
     setInterviewIdx(0);
@@ -228,9 +243,9 @@ export function usePlacementMentor() {
     setInterviewPanel("chat");
     setInterviewTyping(true);
     setTimeout(() => {
-      const q = appData.interviews[type as keyof typeof appData.interviews][0];
+      const q = questions[0];
       setInterviewTyping(false);
-      setChatLog([{ sender: "interviewer", text: q.question, textTe: q.questionTe }]);
+      setChatLog([{ sender: "interviewer", text: q.question, textLocal: q.questionLocal }]);
     }, 1000);
   };
 
@@ -241,7 +256,7 @@ export function usePlacementMentor() {
     setChatLog((prev) => [...prev, { sender: "candidate", text }]);
     setInterviewTyping(true);
     setTimeout(() => {
-      const questions = appData.interviews[interviewType as keyof typeof appData.interviews];
+      const questions = getInterviewQuestions(interviewType, interviewBranch);
       const q = questions[interviewIdx];
       let hits = 0;
       const lower = text.toLowerCase();
@@ -266,7 +281,7 @@ export function usePlacementMentor() {
       const nextIdx = interviewIdx + 1;
       setChatLog((prev) => [
         ...prev,
-        { sender: "interviewer", text: `[Feedback: ${score.toFixed(1)}/10] - ${feedback}`, textTe: feedbackTe },
+        { sender: "interviewer", text: `[Feedback: ${score.toFixed(1)}/10] - ${feedback}`, textLocal: lang === "te" ? feedbackTe : undefined },
       ]);
       if (nextIdx < questions.length) {
         setInterviewIdx(nextIdx);
@@ -275,7 +290,7 @@ export function usePlacementMentor() {
           setTimeout(() => {
             const nq = questions[nextIdx];
             setInterviewTyping(false);
-            setChatLog((prev) => [...prev, { sender: "interviewer", text: nq.question, textTe: nq.questionTe }]);
+            setChatLog((prev) => [...prev, { sender: "interviewer", text: nq.question, textLocal: nq.questionLocal }]);
           }, 1000);
         }, 1500);
       } else {
@@ -285,7 +300,7 @@ export function usePlacementMentor() {
             {
               sender: "interviewer",
               text: "You have completed the mock interview! Please click 'End Interview & Get Report' at the top to view your detailed scorecard.",
-              textTe: "మీ మాక్ ఇంటర్వ్యూ విజయవంతంగా పూర్తయింది! రిపోర్ట్ చూడటానికి పైన ఉన్న బటన్ క్లిక్ చేయండి.",
+              textLocal: lang === "te" ? "మీ మాక్ ఇంటర్వ్యూ విజయవంతంగా పూర్తయింది! రిపోర్ట్ చూడటానికి పైన ఉన్న బటన్ క్లిక్ చేయండి." : undefined,
             },
           ]);
         }, 1000);
@@ -439,6 +454,10 @@ export function usePlacementMentor() {
 
   return {
     lang,
+    setLanguage,
+    interviewBranch,
+    setInterviewBranch,
+    availableInterviewTypes: getAvailableInterviewTypes(interviewBranch),
     theme,
     activeTab,
     streak,
@@ -482,7 +501,7 @@ export function usePlacementMentor() {
     pageHeader,
     t,
     toggleTheme,
-    toggleLanguage,
+    getInterviewerTitle: (type: InterviewType | null) => getInterviewerTitle(type, interviewBranch),
     switchTab,
     toggleHabit,
     toggleHeatmapCell,
@@ -498,7 +517,6 @@ export function usePlacementMentor() {
     endInterviewSession,
     restartMockInterview,
     getInterviewReport,
-    getInterviewerTitle,
     startSkillGapQuiz,
     selectQuizOption,
     nextQuizQuestion,

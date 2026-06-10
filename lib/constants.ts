@@ -1,4 +1,4 @@
-import type { Lang } from "./languages";
+import type { Lang } from "./languageMeta";
 
 export const quotes: { en: string; te: string; author: string }[] = [
   {
@@ -48,16 +48,7 @@ export const NAV_ITEMS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: "tracker", icon: "🔥", labelKey: "tracker" },
 ];
 
-export function getInterviewerTitle(type: string | null) {
-  const titles: Record<string, { en: string; te: string }> = {
-    technical: { en: "AI Tech Lead (Microsoft/TCS mock)", te: "AI టెక్నికల్ మేనేజర్ (టాటా/మైక్రోసాఫ్ట్ మాక్)" },
-    hr: { en: "AI Senior HR Specialist", te: "AI సీనియర్ HR మేనేజర్" },
-    aiml: { en: "AI/ML Principal Architect", te: "AI/ML ప్రిన్సిపల్ ఆర్కిటెక్ట్" },
-  };
-  return titles[type ?? ""] ?? { en: "Recruiter", te: "ఇంటర్వ్యూయర్" };
-}
-
-export function getPageHeader(tab: TabId, lang: Lang, t: (key: string) => string) {
+export function getPageHeader(tab: TabId, _lang: Lang, t: (key: string) => string) {
   const map: Record<TabId, { title: string; sub: string }> = {
     dashboard: { title: t("appName"), sub: t("tagline") },
     roadmap: { title: t("roadmap"), sub: t("roadmapSub") },

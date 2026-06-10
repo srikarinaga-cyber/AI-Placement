@@ -3,6 +3,8 @@
 import { usePlacementMentor } from "@/hooks/usePlacementMentor";
 import { NAV_ITEMS } from "@/lib/constants";
 import { appData } from "@/lib/data";
+import { LANG_OPTIONS, BRANCH_OPTIONS } from "@/lib/languages";
+import type { InterviewType } from "@/lib/interviewQuestions";
 
 function HabitList({
   habits,
@@ -65,16 +67,28 @@ export default function PlacementMentorApp() {
         </div>
       </aside>
 
-      <main className="content-area">
+      <main className={`content-area branch-bg-${app.interviewBranch} ${app.activeTab === "mockInterview" ? "interview-active-bg" : ""}`}>
         <header className="top-bar">
           <div className="header-title-sec">
             <h1>{app.pageHeader.title}</h1>
             <p>{app.pageHeader.sub}</p>
           </div>
           <div className="controls-group">
-            <button className="btn-control btn-lang" onClick={app.toggleLanguage}>
-              🌐 {app.t("toggleLanguage")}
-            </button>
+            <label className="lang-select-wrap">
+              <span className="lang-select-icon">🌐</span>
+              <select
+                className="lang-select"
+                value={app.lang}
+                onChange={(e) => app.setLanguage(e.target.value as typeof app.lang)}
+                aria-label={app.t("selectLanguage")}
+              >
+                {LANG_OPTIONS.map((opt) => (
+                  <option key={opt.code} value={opt.code}>
+                    {opt.native}
+                  </option>
+                ))}
+              </select>
+            </label>
             <button className="btn-control" onClick={app.toggleTheme}>
               🌓 Theme
             </button>
@@ -121,7 +135,7 @@ export default function PlacementMentorApp() {
                   <div>
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: "1rem" }}>{app.t("motivationalQuote")}</h2>
                     <p style={{ fontStyle: "italic", lineHeight: 1.6, color: "var(--text-secondary)" }}>
-                      &quot;{app.currentQuote[app.lang]}&quot;
+                      &quot;{app.lang === "te" ? app.currentQuote.te : app.currentQuote.en}&quot;
                     </p>
                     <p style={{ textAlign: "right", marginTop: "0.5rem", fontWeight: 600, color: "var(--accent-color)" }}>
                       - {app.currentQuote.author}
@@ -309,15 +323,29 @@ export default function PlacementMentorApp() {
           {app.activeTab === "mockInterview" && (
             <section className="tab-view active-view">
               {app.interviewPanel === "setup" && (
-                <div className="card-glass">
+                <div className="card-glass interview-setup-card">
                   <h2 style={{ marginBottom: "0.5rem" }}>{app.t("interviewTitle")}</h2>
                   <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>{app.t("interviewSub")}</p>
                   <div className="interview-config">
                     <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🤖</div>
+                    <div className="form-group" style={{ width: "100%", maxWidth: 420, marginBottom: "1.25rem" }}>
+                      <label className="form-label">{app.t("selectCourseForInterview")}</label>
+                      <select
+                        className="form-select"
+                        value={app.interviewBranch}
+                        onChange={(e) => app.setInterviewBranch(e.target.value as typeof app.interviewBranch)}
+                      >
+                        {BRANCH_OPTIONS.map((b) => (
+                          <option key={b.value} value={b.value}>
+                            {app.t(b.labelKey)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <h3 style={{ marginBottom: "1rem" }}>{app.t("selectRound")}</h3>
                     <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%", maxWidth: 400 }}>
-                      {(["technical", "hr", "aiml"] as const).map((type) => (
-                        <button key={type} className="btn-control" style={{ justifyContent: "center", padding: "1rem" }} onClick={() => app.startInterviewSession(type)}>
+                      {app.availableInterviewTypes.map((type) => (
+                        <button key={type} className="btn-control interview-type-btn" onClick={() => app.startInterviewSession(type as InterviewType)}>
                           {app.t(type === "technical" ? "technicalRound" : type === "hr" ? "hrRound" : "aiMLRound")}
                         </button>
                       ))}
@@ -331,7 +359,7 @@ export default function PlacementMentorApp() {
                     <div className="chat-agent-info">
                       <div className="chat-agent-status" />
                       <div>
-                        <strong>{app.lang === "en" ? app.getInterviewerTitle(app.interviewType).en : app.getInterviewerTitle(app.interviewType).te}</strong>
+                        <strong>{app.getInterviewerTitle(app.interviewType)}</strong>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Evaluation Mode Active</div>
                       </div>
                     </div>
@@ -346,7 +374,9 @@ export default function PlacementMentorApp() {
                           <>
                             <div style={{ fontWeight: 700, fontSize: "0.75rem", color: "var(--accent-color)", marginBottom: "0.25rem" }}>AI Mentor</div>
                             <div>{msg.text}</div>
-                            {msg.textTe && <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", borderTop: "1px dashed var(--border-color)", marginTop: "0.5rem", paddingTop: "0.4rem", fontStyle: "italic" }}>తెలుగు అనువాదం: {msg.textTe}</div>}
+                            {msg.textLocal && app.lang !== "en" && (
+                              <div className="chat-local-text">{msg.textLocal}</div>
+                            )}
                           </>
                         ) : (
                           <>
