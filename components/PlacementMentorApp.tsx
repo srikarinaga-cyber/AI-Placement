@@ -1,10 +1,14 @@
 "use client";
 
-import { usePlacementMentor } from "@/hooks/usePlacementMentor";
+import { useState } from "react";
+import type { User } from "@/hooks/useAuth";
+import type { PlacementMentorAppState } from "@/hooks/usePlacementMentor";
 import { NAV_ITEMS } from "@/lib/constants";
 import { appData } from "@/lib/data";
-import { LANG_OPTIONS, BRANCH_OPTIONS } from "@/lib/languages";
+import { BRANCH_OPTIONS } from "@/lib/languages";
 import type { InterviewType } from "@/lib/interviewQuestions";
+import LanguagePicker from "@/components/LanguagePicker";
+import FeatureGuide from "@/components/FeatureGuide";
 
 function HabitList({
   habits,
@@ -27,8 +31,13 @@ function HabitList({
   );
 }
 
-export default function PlacementMentorApp() {
-  const app = usePlacementMentor();
+type Props = {
+  app: PlacementMentorAppState;
+  user: User;
+};
+
+export default function PlacementMentorApp({ app, user }: Props) {
+  const [showFeatureGuide, setShowFeatureGuide] = useState(false);
   const quizReport = app.quizPanel === "report" ? app.getQuizReport() : null;
   const interviewReport = app.interviewPanel === "report" ? app.getInterviewReport() : null;
   const currentQuiz = appData.quizzes[app.quizIdx];
@@ -56,14 +65,20 @@ export default function PlacementMentorApp() {
             </a>
           ))}
         </nav>
+        <div className="sidebar-lang">
+          <LanguagePicker lang={app.lang} onChange={app.setLanguage} variant="select" label={app.t("selectLanguage")} />
+        </div>
         <div className="sidebar-footer">
           <div className="profile-card">
-            <div className="avatar">SA</div>
+            <div className="avatar">{user.name.slice(0, 2).toUpperCase()}</div>
             <div className="profile-info">
-              <div className="profile-name">Sai Kumar</div>
-              <div className="profile-role">B.Sc AI & ML Student</div>
+              <div className="profile-name">{user.name}</div>
+              <div className="profile-role">{app.t(BRANCH_OPTIONS.find((b) => b.value === user.branch)?.labelKey ?? "branchCse")}</div>
             </div>
           </div>
+          <button type="button" className="btn-control sidebar-logout" onClick={app.logout}>
+            {app.t("logout")}
+          </button>
         </div>
       </aside>
 
@@ -74,22 +89,11 @@ export default function PlacementMentorApp() {
             <p>{app.pageHeader.sub}</p>
           </div>
           <div className="controls-group">
-            <label className="lang-select-wrap">
-              <span className="lang-select-icon">🌐</span>
-              <select
-                className="lang-select"
-                value={app.lang}
-                onChange={(e) => app.setLanguage(e.target.value as typeof app.lang)}
-                aria-label={app.t("selectLanguage")}
-              >
-                {LANG_OPTIONS.map((opt) => (
-                  <option key={opt.code} value={opt.code}>
-                    {opt.native}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button className="btn-control" onClick={app.toggleTheme}>
+            <LanguagePicker lang={app.lang} onChange={app.setLanguage} label={app.t("selectLanguage")} />
+            <button className="btn-control" type="button" onClick={() => setShowFeatureGuide(true)}>
+              ❓ {app.t("whatFeaturesMean")}
+            </button>
+            <button className="btn-control" type="button" onClick={app.toggleTheme}>
               🌓 Theme
             </button>
           </div>
@@ -422,8 +426,44 @@ export default function PlacementMentorApp() {
             </section>
           )}
 
+          {app.activeTab === "assessment" && (
+            <section className="tab-view active-view">
+              <div className="card-glass">
+                <h2 style={{ marginBottom: "0.5rem" }}>{app.t("assessmentHubTitle")}</h2>
+                <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>{app.t("assessmentHubSub")}</p>
+                <div className="assessment-hub-grid">
+                  <button
+                    type="button"
+                    className="assessment-hub-card card-glass"
+                    onClick={() => {
+                      app.switchTab("skillGap");
+                    }}
+                  >
+                    <span className="assessment-hub-icon">⚡</span>
+                    <h3>{app.t("openSkillGap")}</h3>
+                    <p>{app.t("openSkillGapDesc")}</p>
+                  </button>
+                  <button
+                    type="button"
+                    className="assessment-hub-card card-glass"
+                    onClick={() => {
+                      app.switchTab("aptitudeArena");
+                    }}
+                  >
+                    <span className="assessment-hub-icon">🧩</span>
+                    <h3>{app.t("openAptitude")}</h3>
+                    <p>{app.t("openAptitudeDesc")}</p>
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+
           {app.activeTab === "aptitudeArena" && (
             <section className="tab-view active-view">
+              <button type="button" className="back-link" onClick={() => app.switchTab("assessment")}>
+                ← {app.t("assessment")}
+              </button>
               <div className="card-glass aptitude-arena-card">
                 <h2 style={{ marginBottom: "0.5rem" }}>{app.t("aptitudeArena")}</h2>
                 <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>{app.t("aptitudeSub")}</p>
@@ -471,6 +511,9 @@ export default function PlacementMentorApp() {
 
           {app.activeTab === "skillGap" && (
             <section className="tab-view active-view">
+              <button type="button" className="back-link" onClick={() => app.switchTab("assessment")}>
+                ← {app.t("assessment")}
+              </button>
               {app.quizPanel === "intro" && (
                 <div className="card-glass">
                   <h2 style={{ marginBottom: "0.5rem" }}>{app.t("skillGapTitle")}</h2>
@@ -660,6 +703,7 @@ export default function PlacementMentorApp() {
       </main>
 
       {app.toast && <div className="toast-msg" style={{ display: "block" }}>{app.toast}</div>}
+      <FeatureGuide lang={app.lang} open={showFeatureGuide} onClose={() => setShowFeatureGuide(false)} />
     </>
   );
 }

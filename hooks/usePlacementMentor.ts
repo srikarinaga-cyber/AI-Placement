@@ -4,6 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { appData } from "@/lib/data";
 import { translate, type Lang } from "@/lib/languages";
 import type { Branch } from "@/lib/languageMeta";
+import type { User } from "@/hooks/useAuth";
+
+const LANG_STORAGE_KEY = "placement_mentor_lang";
 import {
   getInterviewQuestions,
   getAvailableInterviewTypes,
@@ -35,8 +38,14 @@ const defaultResume = {
     "Web Developer Intern at Local Startup: Built responsive interfaces, handled MySQL databases, and improved load times by 20%.",
 };
 
-export function usePlacementMentor() {
-  const [lang, setLang] = useState<Lang>("en");
+function readStoredLang(): Lang {
+  if (typeof window === "undefined") return "en";
+  const stored = localStorage.getItem(LANG_STORAGE_KEY) as Lang | null;
+  return stored ?? "en";
+}
+
+export function usePlacementMentor(user: User | null, logout: () => void) {
+  const [lang, setLangState] = useState<Lang>("en");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [streak] = useState(5);
@@ -44,8 +53,17 @@ export function usePlacementMentor() {
   const [heatmapHistory, setHeatmapHistory] = useState(INITIAL_HEATMAP);
   const [roadmapPhases, setRoadmapPhases] = useState<RoadmapPhase[]>([]);
   const [completedRoadmapTasks, setCompletedRoadmapTasks] = useState<Record<string, boolean>>({});
-  const [roadmapForm, setRoadmapForm] = useState({ branch: "aiml", level: "beginner", goal: "product", duration: "3" });
-  const [resume, setResume] = useState(defaultResume);
+  const [roadmapForm, setRoadmapForm] = useState({
+    branch: (user?.branch ?? "aiml") as Branch,
+    level: "beginner",
+    goal: "product",
+    duration: "3",
+  });
+  const [resume, setResume] = useState({
+    ...defaultResume,
+    name: user?.name ?? defaultResume.name,
+    email: user?.email ?? defaultResume.email,
+  });
   const [atsScore, setAtsScore] = useState<number | null>(null);
   const [atsSuggestions, setAtsSuggestions] = useState<AtsSuggestion[]>([]);
   const [showAtsCard, setShowAtsCard] = useState(false);
@@ -104,10 +122,15 @@ export function usePlacementMentor() {
   }, [activeDays, completedRoadmapTasks, atsScore, jobs, interviewScores]);
 
   useEffect(() => {
+    setLangState(readStoredLang());
+  }, []);
+
+  useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   useEffect(() => {
+    localStorage.setItem(LANG_STORAGE_KEY, lang);
     document.documentElement.setAttribute("data-lang", lang);
     document.documentElement.setAttribute("data-branch", interviewBranch);
     document.title = `${translate(lang, "appName")} - Placements Guide`;
@@ -126,7 +149,7 @@ export function usePlacementMentor() {
   const showToastMsg = (msg: string) => setToast(msg);
 
   const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  const setLanguage = (code: Lang) => setLang(code);
+  const setLanguage = (code: Lang) => setLangState(code);
   const switchTab = (tabId: TabId) => setActiveTab(tabId);
 
   const toggleHabit = (idx: number) => {
@@ -525,5 +548,9 @@ export function usePlacementMentor() {
     setProjectFilter,
     setModalProjectId,
     currentQuote,
+    logout,
+    user,
   };
 }
+
+export type PlacementMentorAppState = ReturnType<typeof usePlacementMentor>;

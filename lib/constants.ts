@@ -30,6 +30,7 @@ export type TabId =
   | "roadmap"
   | "resumeBuilder"
   | "mockInterview"
+  | "assessment"
   | "aptitudeArena"
   | "skillGap"
   | "projects"
@@ -39,10 +40,9 @@ export type TabId =
 export const NAV_ITEMS: { id: TabId; icon: string; labelKey: string }[] = [
   { id: "dashboard", icon: "📊", labelKey: "dashboard" },
   { id: "roadmap", icon: "🗺️", labelKey: "roadmap" },
-  { id: "resumeBuilder", icon: "📝", labelKey: "resumeBuilder" },
   { id: "mockInterview", icon: "💬", labelKey: "mockInterview" },
-  { id: "aptitudeArena", icon: "🧩", labelKey: "aptitudeArena" },
-  { id: "skillGap", icon: "⚡", labelKey: "skillGap" },
+  { id: "assessment", icon: "📋", labelKey: "assessment" },
+  { id: "resumeBuilder", icon: "📝", labelKey: "resumeBuilder" },
   { id: "projects", icon: "📁", labelKey: "projects" },
   { id: "jobBoard", icon: "💼", labelKey: "jobBoard" },
   { id: "tracker", icon: "🔥", labelKey: "tracker" },
@@ -54,6 +54,7 @@ export function getPageHeader(tab: TabId, _lang: Lang, t: (key: string) => strin
     roadmap: { title: t("roadmap"), sub: t("roadmapSub") },
     resumeBuilder: { title: t("resumeBuilder"), sub: t("resumeSub") },
     mockInterview: { title: t("mockInterview"), sub: t("interviewSub") },
+    assessment: { title: t("assessment"), sub: t("assessmentSub") },
     aptitudeArena: { title: t("aptitudeArena"), sub: t("aptitudeSub") },
     skillGap: { title: t("skillGap"), sub: t("skillGapSub") },
     projects: { title: t("projects"), sub: t("projectsSub") },

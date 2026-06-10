@@ -1,5 +1,5 @@
-import PlacementMentorApp from "@/components/PlacementMentorApp";
+import AppShell from "@/components/AppShell";
 
 export default function Home() {
-  return <PlacementMentorApp />;
+  return <AppShell />;
 }
