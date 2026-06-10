@@ -6,6 +6,7 @@ import type { PlacementMentorAppState } from "@/hooks/usePlacementMentor";
 import { NAV_ITEMS } from "@/lib/constants";
 import { appData } from "@/lib/data";
 import { BRANCH_OPTIONS } from "@/lib/languages";
+import type { Branch } from "@/lib/languageMeta";
 import type { InterviewType } from "@/lib/interviewQuestions";
 import LanguagePicker from "@/components/LanguagePicker";
 import FeatureGuide from "@/components/FeatureGuide";
@@ -191,7 +192,7 @@ export default function PlacementMentorApp({ app, user }: Props) {
                 <div className="roadmap-form">
                   <div className="form-group">
                     <label className="form-label">{app.t("selectBranch")}</label>
-                    <select className="form-select" value={app.roadmapForm.branch} onChange={(e) => app.setRoadmapForm({ ...app.roadmapForm, branch: e.target.value })}>
+                    <select className="form-select" value={app.roadmapForm.branch} onChange={(e) => app.setRoadmapForm({ ...app.roadmapForm, branch: e.target.value as Branch })}>
                       <option value="aiml">B.Sc AI & ML / Data Science</option>
                       <option value="cse">CSE / IT / MCA</option>
                       <option value="ece">ECE / EEE</option>

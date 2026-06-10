@@ -255,7 +255,6 @@ export const translations: Record<"en" | "te", Record<string, string>> = {
     nextQuestion: "తదుపరి ప్రశ్న",
     applyNow: "అప్లై చేయండి",
     applied: "✓ అప్లై చేయడం విజయవంతమైంది",
-    selectCourseForInterview: "మీ కోర్స్ / విషయం ఎంచుకోండి",
     assessment: "అసెస్‌మెంట్",
     assessmentSub: "కోడింగ్, ఆప్టిట్యూడ్, కమ్యూనికేషన్ పరీక్షించి లోపాలు గుర్తించండి.",
     assessmentHubTitle: "ప్లేస్‌మెంట్ అసెస్‌మెంట్ సెంటర్",
