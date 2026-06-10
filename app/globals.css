@@ -159,6 +159,13 @@ body::after {
   padding: 0.35rem 0.6rem;
 }
 
+.lang-select-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 .lang-select {
   border: none;
   background: transparent;
@@ -168,6 +175,17 @@ body::after {
   font-weight: 500;
   cursor: pointer;
   outline: none;
+  min-width: 5.5rem;
+}
+
+.lang-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-lang .lang-select {
+  width: 100%;
+  min-width: 0;
 }
 
 .interview-setup-card {
@@ -354,6 +372,12 @@ header.top-bar {
   border-bottom: 1px solid var(--border-color);
 }
 
+.header-title-sec {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
 .header-title-sec h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -364,10 +388,28 @@ header.top-bar {
   margin-top: 0.25rem;
 }
 
+.sidebar-toggle {
+  display: none;
+  padding: 0.55rem 0.75rem !important;
+  flex-shrink: 0;
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  border: none;
+  background: rgba(15, 23, 42, 0.45);
+  cursor: pointer;
+}
+
 .controls-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
 }
 
 .btn-control {
@@ -1453,6 +1495,10 @@ header.top-bar {
   color: var(--text-secondary);
 }
 
+.login-hero .lang-picker-grid-wrap {
+  margin-bottom: 1.5rem;
+}
+
 .login-hero h1 {
   font-size: 2.5rem;
   font-weight: 800;
@@ -1718,6 +1764,12 @@ header.top-bar {
   .lang-picker-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .sidebar-toggle {
+    display: flex;
+  }
+  .sidebar-backdrop {
+    display: block;
+  }
   aside.sidebar {
     transform: translateX(-100%);
   }
@@ -1727,5 +1779,17 @@ header.top-bar {
   main.content-area {
     margin-left: 0;
     padding: 1.25rem;
+  }
+  header.top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .controls-group {
+    width: 100%;
+  }
+  .lang-select-wrap {
+    flex: 1;
+    min-width: 0;
   }
 }

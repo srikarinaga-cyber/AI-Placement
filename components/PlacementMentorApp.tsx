@@ -38,13 +38,23 @@ type Props = {
 
 export default function PlacementMentorApp({ app, user }: Props) {
   const [showFeatureGuide, setShowFeatureGuide] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const quizReport = app.quizPanel === "report" ? app.getQuizReport() : null;
   const interviewReport = app.interviewPanel === "report" ? app.getInterviewReport() : null;
   const currentQuiz = appData.quizzes[app.quizIdx];
 
   return (
     <>
-      <aside className="sidebar" id="app-sidebar">
+      {sidebarOpen && (
+        <button
+          type="button"
+          className="sidebar-backdrop"
+          aria-label="Close menu"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`} id="app-sidebar">
         <div className="brand">
           <div className="brand-icon">🎓</div>
           <div className="brand-name">AI Mentor</div>
@@ -58,6 +68,7 @@ export default function PlacementMentorApp({ app, user }: Props) {
               onClick={(e) => {
                 e.preventDefault();
                 app.switchTab(item.id);
+                setSidebarOpen(false);
               }}
             >
               <span className="menu-item-icon">{item.icon}</span>
@@ -85,8 +96,18 @@ export default function PlacementMentorApp({ app, user }: Props) {
       <main className={`content-area branch-bg-${app.interviewBranch} ${app.activeTab === "mockInterview" ? "interview-active-bg" : ""}`}>
         <header className="top-bar">
           <div className="header-title-sec">
-            <h1>{app.pageHeader.title}</h1>
-            <p>{app.pageHeader.sub}</p>
+            <button
+              type="button"
+              className="sidebar-toggle btn-control"
+              aria-label="Open menu"
+              onClick={() => setSidebarOpen(true)}
+            >
+              ☰
+            </button>
+            <div>
+              <h1>{app.pageHeader.title}</h1>
+              <p>{app.pageHeader.sub}</p>
+            </div>
           </div>
           <div className="controls-group">
             <LanguagePicker lang={app.lang} onChange={app.setLanguage} label={app.t("selectLanguage")} />

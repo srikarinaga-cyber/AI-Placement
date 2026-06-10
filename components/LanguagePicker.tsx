@@ -32,14 +32,19 @@ export default function LanguagePicker({ lang, onChange, variant = "select", lab
     );
   }
 
+  const selectLabel = label ?? translate(lang, "selectLanguage");
+
   return (
     <label className="lang-select-wrap">
-      <span className="lang-select-icon">🌐</span>
+      <span className="lang-select-icon" aria-hidden="true">
+        🌐
+      </span>
+      <span className="lang-select-label">{selectLabel}</span>
       <select
         className="lang-select"
         value={lang}
         onChange={(e) => onChange(e.target.value as Lang)}
-        aria-label={label ?? translate(lang, "selectLanguage")}
+        aria-label={selectLabel}
       >
         {LANG_OPTIONS.map((opt) => (
           <option key={opt.code} value={opt.code}>

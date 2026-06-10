@@ -31,6 +31,12 @@ export default function LoginPage({ lang, setLanguage, onLogin }: Props) {
   return (
     <div className="login-page">
       <div className="login-hero">
+        <LanguagePicker
+          lang={lang}
+          onChange={setLanguage}
+          variant="grid"
+          label={t("selectLanguagePrompt")}
+        />
         <span className="login-badge">{t("loginBadge")}</span>
         <h1>{t("loginTitle")}</h1>
         <p>{t("loginSubtitle")}</p>
@@ -43,13 +49,6 @@ export default function LoginPage({ lang, setLanguage, onLogin }: Props) {
       </div>
 
       <div className="login-card card-glass">
-        <LanguagePicker
-          lang={lang}
-          onChange={setLanguage}
-          variant="grid"
-          label={t("selectLanguagePrompt")}
-        />
-
         <div className="login-tabs">
           <button type="button" className={mode === "login" ? "active" : ""} onClick={() => setMode("login")}>
             {t("loginTab")}
