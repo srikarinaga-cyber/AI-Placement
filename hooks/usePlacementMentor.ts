@@ -25,6 +25,7 @@ type Job = (typeof appData.jobAlerts)[number] & { applied: boolean };
 type ChatMsg = { sender: "interviewer" | "candidate"; text: string; textLocal?: string };
 type RoadmapPhase = ReturnType<typeof appData.getRoadmap>[number];
 type AtsSuggestion = { en: string; te: string };
+type QuizQuestion = (typeof appData.quizzes)[number];
 
 const defaultResume = {
   name: "Sai Kumar",
@@ -93,10 +94,11 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
   const t = useCallback((key: string) => translate(lang, key), [lang]);
   const pageHeader = useMemo(() => getPageHeader(activeTab, lang, t), [activeTab, lang, t]);
 
-  const quizzes = useMemo(
-    () => appData.getQuizzes(interviewBranch),
-    [interviewBranch]
-  );
+  const [quizzes, setQuizzes] = useState<QuizQuestion[]>([]);
+
+  useEffect(() => {
+    setQuizzes(appData.getQuizzes(interviewBranch));
+  }, [interviewBranch]);
 
   const aptitudeQuestions = useMemo(
     () => appData.aptitudeQuestions.filter((q) => q.topic === aptitudeCategory),
@@ -411,6 +413,7 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
   };
 
   const startSkillGapQuiz = () => {
+    setQuizzes(appData.getQuizzes(interviewBranch));
     setQuizPanel("active");
     setQuizIdx(0);
     setQuizAnswers([]);
@@ -472,6 +475,7 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
   };
 
   const restartSkillGapQuiz = () => {
+    setQuizzes(appData.getQuizzes(interviewBranch));
     setQuizPanel("intro");
     setQuizIdx(0);
     setQuizAnswers([]);

@@ -264,7 +264,11 @@ export const appData = {
   ],
 
   getQuizzes: (branch: string) => {
-    const commonQuestions = [
+    const shuffle = <T>(array: T[]): T[] => {
+      return [...array].sort(() => Math.random() - 0.5);
+    };
+
+    const aptitudePool = [
       {
         id: 3,
         section: "aptitude",
@@ -286,6 +290,39 @@ export const appData = {
         explanationTe: "M1 * D1 = M2 * D2 సూత్రం ప్రకారం, 10 * 12 = 15 * D2. 120 = 15 * D2. D2 = 120/15 = 8 రోజులు."
       },
       {
+        id: 6,
+        section: "aptitude",
+        question: "If the cost price of an item is Rs. 200 and it is sold for Rs. 250, what is the profit percentage?",
+        questionTe: "ఒక వస్తువు కొనుగోలు ధర రూ. 200 మరియు దానిని రూ. 250 కి విక్రయిస్తే, లాభ శాతం ఎంత?",
+        options: ["15%", "20%", "25%", "30%"],
+        answerIndex: 2,
+        explanation: "Profit = 250 - 200 = 50. Profit % = (50 / 200) * 100 = 25%.",
+        explanationTe: "లాభం = 250 - 200 = 50. లాభ శాతం = (50 / 200) * 100 = 25%."
+      },
+      {
+        id: 7,
+        section: "aptitude",
+        question: "A train 150m long passes a pole in 15 seconds. What is the speed of the train in km/h?",
+        questionTe: "150 మీటర్ల పొడవున్న రైలు ఒక స్తంభాన్ని 15 సెకన్లలో దాటుతుంది. ఆ రైలు వేగం గంటకు ఎన్ని కిలోమీటర్లు (km/h)?",
+        options: ["36 km/h", "54 km/h", "72 km/h", "90 km/h"],
+        answerIndex: 0,
+        explanation: "Speed = 150 / 15 = 10 m/s. In km/h = 10 * 18/5 = 36 km/h.",
+        explanationTe: "వేగం = 150/15 = 10 మీ/సె. కిమీ/గంట లోకి మార్చడానికి: 10 * 18/5 = 36 కిమీ/గంట."
+      },
+      {
+        id: 8,
+        section: "aptitude",
+        question: "Find the average of the first five prime numbers.",
+        questionTe: "మొదటి ఐదు ప్రధాన సంఖ్యల (prime numbers) సగటు ఎంత?",
+        options: ["5.6", "5.8", "6.2", "6.8"],
+        answerIndex: 0,
+        explanation: "First five prime numbers: 2, 3, 5, 7, 11. Sum = 28. Average = 28 / 5 = 5.6.",
+        explanationTe: "మొదటి ఐదు ప్రధాన సంఖ్యలు: 2, 3, 5, 7, 11. మొత్తం = 28. సగటు = 28 / 5 = 5.6."
+      }
+    ];
+
+    const commPool = [
+      {
         id: 5,
         section: "communication",
         question: "Select the sentence that represents a professional greeting in an email.",
@@ -299,12 +336,37 @@ export const appData = {
         answerIndex: 1,
         explanation: "'Dear Hiring Team, I hope this email finds you well' is polite, formal, and ideal for business or job application emails.",
         explanationTe: "'Dear Hiring Team, I hope this email finds you well' అనేది మర్యాదగా మరియు పద్ధతిగా ఉంటుంది. ఇది ఉద్యోగ దరఖాస్తులకు చాలా అనువైనది."
+      },
+      {
+        id: 9,
+        section: "communication",
+        question: "Choose the sentence with the correct grammar.",
+        questionTe: "సరైన వ్యాకరణం (grammar) ఉన్న వాక్యాన్ని ఎంచుకోండి.",
+        options: ["She don't like coffee.", "She doesn't likes coffee.", "She doesn't like coffee.", "She not like coffee."],
+        answerIndex: 2,
+        explanation: "'She' is singular, so it takes 'doesn't', followed by the base verb 'like'.",
+        explanationTe: "'She' సింగులర్ కాబట్టి 'doesn't' రావాలి, ఆ తర్వాత బేస్ వెర్బ్ 'like' ఉపయోగించాలి."
+      },
+      {
+        id: 10,
+        section: "communication",
+        question: "What is the most appropriate way to politely decline a meeting invite?",
+        questionTe: "మీటింగ్ ఆహ్వానాన్ని మర్యాదపూర్వకంగా తిరస్కరించడానికి సరైన పద్ధతి ఏది?",
+        options: [
+          "I won't come, I am busy.",
+          "Thank you for the invite. Unfortunately, I have a prior commitment at that time.",
+          "Delete my name from the list.",
+          "No way, I cannot attend."
+        ],
+        answerIndex: 1,
+        explanation: "Declining politely with a thank you and a brief reason is professional etiquette.",
+        explanationTe: "ఆహ్వానానికి ధన్యవాదాలు తెలిపి, సమయం కుదరకపోవడానికి గల కారణాన్ని పద్ధతిగా చెప్పడం ప్రొఫెషనల్ పద్ధతి."
       }
     ];
 
-    let codingQuestions = [];
+    let codingPool = [];
     if (branch === "aiml") {
-      codingQuestions = [
+      codingPool = [
         {
           id: 1,
           section: "coding",
@@ -324,10 +386,30 @@ export const appData = {
           answerIndex: 0,
           explanation: "np.random.rand() generates random values between 0 and 1.",
           explanationTe: "np.random.rand() 0 మరియు 1 మధ్య యాదృచ్ఛిక విలువలను సృష్టిస్తుంది."
+        },
+        {
+          id: 11,
+          section: "coding",
+          question: "Which activation function outputs values in the range of [0, 1]?",
+          questionTe: "క్రింది వాటిలో ఏ యాక్టివేషన్ ఫంక్షన్ 0 మరియు 1 మధ్య విలువలను అవుట్‌పుట్‌గా ఇస్తుంది?",
+          options: ["ReLU", "Sigmoid", "Tanh", "Leaky ReLU"],
+          answerIndex: 1,
+          explanation: "The Sigmoid activation function maps any real-valued number into a range between 0 and 1.",
+          explanationTe: "సిగ్మాయిడ్ (Sigmoid) యాక్టివేషన్ ఫంక్షన్ ఏ విలువనైనా 0 మరియు 1 మధ్య పరిధిలోకి మారుస్తుంది."
+        },
+        {
+          id: 12,
+          section: "coding",
+          question: "What is the primary purpose of data normalization in machine learning?",
+          questionTe: "మెషిన్ లెర్నింగ్‌లో డేటా నార్మలైజేషన్ (normalization) యొక్క ప్రధాన ఉద్దేశ్యం ఏమిటి?",
+          options: ["To reduce data size", "To scale features to a similar range", "To encode categorical values", "To handle missing values"],
+          answerIndex: 1,
+          explanation: "Normalization scales numerical features to a uniform range, helping gradient descent converge faster.",
+          explanationTe: "ఫీచర్లను ఒకే స్థాయి పరిధిలోకి తీసుకురావడం ద్వారా గ్రేడియంట్ డిసెంట్ త్వరగా కన్వర్జ్ అవ్వడానికి సహాయపడుతుంది."
         }
       ];
     } else if (branch === "ece") {
-      codingQuestions = [
+      codingPool = [
         {
           id: 1,
           section: "coding",
@@ -347,10 +429,30 @@ export const appData = {
           answerIndex: 1,
           explanation: "An AND gate outputs 1 only when all inputs are 1.",
           explanationTe: "AND గేట్ యొక్క అన్ని ఇన్‌పుట్‌లు 1 అయినప్పుడు మాత్రమే అవుట్‌పుట్ 1 అవుతుంది."
+        },
+        {
+          id: 13,
+          section: "coding",
+          question: "What is the primary function of a capacitor in a power supply circuit?",
+          questionTe: "పవర్ సప్లై సర్క్యూట్‌లో కెపాసిటర్ (Capacitor) యొక్క ప్రధాన పాత్ర ఏమిటి?",
+          options: ["To amplify signals", "To store charge and smooth voltage ripples", "To regulate current flow", "To convert AC to DC"],
+          answerIndex: 1,
+          explanation: "Capacitors smooth out voltage fluctuations in power supply circuits by filtering AC ripples.",
+          explanationTe: "ఛార్జ్ ని నిల్వ ఉంచడం ద్వారా వోల్టేజ్ లోని హెచ్చుతగ్గులను తొలగించి స్థిరమైన సప్లై అందించడానికి సహాయపడుతుంది."
+        },
+        {
+          id: 14,
+          section: "coding",
+          question: "Which communication protocol uses only two wires (SDA and SCL) for communication?",
+          questionTe: "కమ్యూనికేషన్ కోసం కేవలం రెండు వైర్లను (SDA మరియు SCL) మాత్రమే ఉపయోగించే ప్రోటోకాల్ ఏది?",
+          options: ["SPI", "UART", "I2C", "CAN"],
+          answerIndex: 2,
+          explanation: "I2C (Inter-Integrated Circuit) uses SDA (Serial Data) and SCL (Serial Clock) wires for bidirectional communication.",
+          explanationTe: "I2C ప్రోటోకాల్ కేవలం రెండు లైన్ల ద్వారా వివిధ ఐసీల మధ్య కమ్యూనికేషన్ జరుపుతుంది."
         }
       ];
     } else if (branch === "mech_civil") {
-      codingQuestions = [
+      codingPool = [
         {
           id: 1,
           section: "coding",
@@ -370,11 +472,31 @@ export const appData = {
           answerIndex: 2,
           explanation: "Python is widely used for CAD scripting and automating engineering calculations.",
           explanationTe: "CAD స్క్రిప్టింగ్ మరియు ఇంజనీరింగ్ లెక్కల ఆటోమేషన్ కోసం పైథాన్‌ను విస్తృతంగా ఉపయోగిస్తారు."
+        },
+        {
+          id: 15,
+          section: "coding",
+          question: "In G-code programming for CNC machines, what does the command 'G00' stand for?",
+          questionTe: "CNC మెషిన్స్ లో వాడే G-code ప్రోగ్రామింగ్ లో 'G00' కమాండ్ దేనిని సూచిస్తుంది?",
+          options: ["Rapid linear positioning", "Linear interpolation (cutting feed)", "Circular interpolation clockwise", "Pause/Dwell"],
+          answerIndex: 0,
+          explanation: "G00 commands the CNC machine to move rapidly to a coordinate without cutting material.",
+          explanationTe: "మెటీరియల్ కట్ చేయకుండా వేగంగా ఒక పాయింట్ నుండి మరొక పాయింట్ కి వెళ్ళడానికి G00 వాడతారు."
+        },
+        {
+          id: 16,
+          section: "coding",
+          question: "Which sensor is commonly used in autonomous vehicles to measure distances using laser light pulses?",
+          questionTe: "స్వయంప్రతిపత్తి కలిగిన వాహనాలలో లేజర్ కాంతి కిరణాల ద్వారా వస్తువుల దూరాన్ని కొలవడానికి ఏ సెన్సార్ ఉపయోగిస్తారు?",
+          options: ["Sonar", "Lidar", "Radar", "Infrared"],
+          answerIndex: 1,
+          explanation: "Lidar (Light Detection and Ranging) uses laser pulses to measure ranges/distances to targets.",
+          explanationTe: "లైడార్ (Lidar) లేజర్ పల్స్ ఉపయోగించి చుట్టుపక్కల వస్తువుల దూరాన్ని కచ్చితంగా కొలుస్తుంది."
         }
       ];
     } else {
       // Default to CSE/IT
-      codingQuestions = [
+      codingPool = [
         {
           id: 1,
           section: "coding",
@@ -394,11 +516,35 @@ export const appData = {
           answerIndex: 1,
           explanation: "The square brackets [] denote an empty list in Python, so its type is list.",
           explanationTe: "పైథాన్‌లో స్క్వేర్ బ్రాకెట్స్ [] ఖాళీ లిస్ట్‌ని సూచిస్తాయి, కాబట్టి దాని టైప్ 'list' అవుతుంది."
+        },
+        {
+          id: 17,
+          section: "coding",
+          question: "Which of the following is not a valid access modifier in Java?",
+          questionTe: "కింది వాటిలో జావాలో చెల్లుబాటు కాని యాక్సెస్ మోడిఫైయర్ ఏది?",
+          options: ["public", "private", "internal", "protected"],
+          answerIndex: 2,
+          explanation: "Java access modifiers are public, private, protected, and default. `internal` is used in C#.",
+          explanationTe: "జావాలో `public`, `private`, `protected` ఉంటాయి కానీ `internal` అనేది C# లో ఉపయోగించేది."
+        },
+        {
+          id: 18,
+          section: "coding",
+          question: "What is the time complexity of searching in a Hash Map in the average case?",
+          questionTe: "హ్యాష్ మ్యాప్ (Hash Map) లో ఒక విలువను సెర్చ్ చేయడానికి యావరేజ్ కేస్ లో పట్టే సమయం ఎంత?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          answerIndex: 0,
+          explanation: "In average case, a Hash Map provides constant time O(1) complexity for search, insert, and delete operations.",
+          explanationTe: "హ్యాష్ మ్యాప్ సాధారణంగా ఓ(1) సమయం లోనే సెర్చ్ ఆపరేషన్ పూర్తి చేస్తుంది."
         }
       ];
     }
 
-    return [...codingQuestions, ...commonQuestions];
+    const selectedCoding = shuffle(codingPool).slice(0, 2);
+    const selectedAptitude = shuffle(aptitudePool).slice(0, 2);
+    const selectedComm = shuffle(commPool).slice(0, 1);
+
+    return [...selectedCoding, ...selectedAptitude, ...selectedComm];
   },
 
   // Project recommendations
