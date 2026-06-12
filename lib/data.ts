@@ -263,6 +263,144 @@ export const appData = {
     }
   ],
 
+  getQuizzes: (branch: string) => {
+    const commonQuestions = [
+      {
+        id: 3,
+        section: "aptitude",
+        question: "A person crosses a 600m long street in 5 minutes. What is his speed in km/hr?",
+        questionTe: "ఒక వ్యక్తి 600 మీటర్ల పొడవైన వీధిని 5 నిమిషాల్లో దాటాడు. అతని వేగం గంటకు ఎన్ని కిలోమీటర్లు (km/hr)?",
+        options: ["3.6 km/hr", "7.2 km/hr", "8.4 km/hr", "10 km/hr"],
+        answerIndex: 1,
+        explanation: "Speed = Distance / Time. Distance = 600m. Time = 5 min = 300s. Speed = 600/300 = 2 m/s. To convert to km/hr, multiply by 18/5: 2 * 18/5 = 7.2 km/hr.",
+        explanationTe: "వేగం = దూరం / సమయం. దూరం = 600మీ. సమయం = 5 నిమిషాలు = 300 సెకన్లు. వేగం = 600/300 = 2 మీ/సె. దీనిని కిమీ/గంట లోకి మార్చడానికి 18/5 తో గుణించాలి: 2 * 18/5 = 7.2 కిమీ/గంట."
+      },
+      {
+        id: 4,
+        section: "aptitude",
+        question: "If 10 men can do a piece of work in 12 days, in how many days can 15 men complete the same work?",
+        questionTe: "10 మంది పురుషులు ఒక పనిని 12 రోజుల్లో పూర్తి చేయగలిగితే, 15 మంది పురుషులు అదే పనిని ఎన్ని రోజుల్లో పూర్తి చేయగలరు?",
+        options: ["6 days", "8 days", "10 days", "15 days"],
+        answerIndex: 1,
+        explanation: "Using the formula M1 * D1 = M2 * D2. So, 10 * 12 = 15 * D2. 120 = 15 * D2. D2 = 120/15 = 8 days.",
+        explanationTe: "M1 * D1 = M2 * D2 సూత్రం ప్రకారం, 10 * 12 = 15 * D2. 120 = 15 * D2. D2 = 120/15 = 8 రోజులు."
+      },
+      {
+        id: 5,
+        section: "communication",
+        question: "Select the sentence that represents a professional greeting in an email.",
+        questionTe: "ఈమెయిల్‌లో ప్రొఫెషనల్ గ్రీటింగ్ (గౌరవప్రదమైన పలకరింపు) కోసం సరిపోయే వాక్యాన్ని ఎంచుకోండి.",
+        options: [
+          "Hey! Check this out now.",
+          "Dear Hiring Team, I hope this email finds you well.",
+          "Yo, hire me for the job.",
+          "What's up HR? Here is my resume."
+        ],
+        answerIndex: 1,
+        explanation: "'Dear Hiring Team, I hope this email finds you well' is polite, formal, and ideal for business or job application emails.",
+        explanationTe: "'Dear Hiring Team, I hope this email finds you well' అనేది మర్యాదగా మరియు పద్ధతిగా ఉంటుంది. ఇది ఉద్యోగ దరఖాస్తులకు చాలా అనువైనది."
+      }
+    ];
+
+    let codingQuestions = [];
+    if (branch === "aiml") {
+      codingQuestions = [
+        {
+          id: 1,
+          section: "coding",
+          question: "Which of the following libraries is primarily used for data manipulation and analysis in Python?",
+          questionTe: "పైథాన్‌లో డేటా విశ్లేషణ మరియు మానిపులేషన్ కోసం క్రింది వాటిలో ఏ లైబ్రరీని ప్రధానంగా ఉపయోగిస్తారు?",
+          options: ["NumPy", "Pandas", "Matplotlib", "Scikit-Learn"],
+          answerIndex: 1,
+          explanation: "Pandas is the core library for dataframes and data manipulation in Python.",
+          explanationTe: "పైథాన్‌లో డేటాఫ్రేమ్స్ మరియు డేటా విశ్లేషణ కోసం పాండాస్ (Pandas) ప్రధానమైన లైబ్రరీ."
+        },
+        {
+          id: 2,
+          section: "coding",
+          question: "In Python NumPy, which function is used to generate random weights from a uniform distribution?",
+          questionTe: "పైథాన్ NumPy లో, యూనిఫార్మ్ డిస్ట్రిబ్యూషన్ నుండి యాదృచ్ఛిక (random) బరువులను సృష్టించడానికి ఏ ఫంక్షన్ ఉపయోగిస్తారు?",
+          options: ["np.random.rand()", "np.zeros()", "np.ones()", "np.empty()"],
+          answerIndex: 0,
+          explanation: "np.random.rand() generates random values between 0 and 1.",
+          explanationTe: "np.random.rand() 0 మరియు 1 మధ్య యాదృచ్ఛిక విలువలను సృష్టిస్తుంది."
+        }
+      ];
+    } else if (branch === "ece") {
+      codingQuestions = [
+        {
+          id: 1,
+          section: "coding",
+          question: "In C programming, which operator is the Address-of operator used to find the memory address of a variable?",
+          questionTe: "C ప్రోగ్రామింగ్‌లో, ఒక వేరియబుల్ యొక్క మెమరీ అడ్రస్‌ను కనుగొనడానికి ఏ ఆపరేటర్‌ను ఉపయోగిస్తారు?",
+          options: ["*", "&", "&&", "->"],
+          answerIndex: 1,
+          explanation: "The & operator returns the memory address of its operand.",
+          explanationTe: "& ఆపరేటర్ దాని పక్కన ఉన్న వేరియబుల్ యొక్క మెమరీ అడ్రస్‌ను రిటర్న్ చేస్తుంది."
+        },
+        {
+          id: 2,
+          section: "coding",
+          question: "Which logic gate outputs a HIGH (1) signal only when all of its inputs are HIGH (1)?",
+          questionTe: "అన్ని ఇన్‌పుట్‌లు HIGH (1) అయినప్పుడు మాత్రమే HIGH (1) అవుట్‌పుట్ ఇచ్చే లాజిక్ గేట్ ఏది?",
+          options: ["OR gate", "AND gate", "NAND gate", "XOR gate"],
+          answerIndex: 1,
+          explanation: "An AND gate outputs 1 only when all inputs are 1.",
+          explanationTe: "AND గేట్ యొక్క అన్ని ఇన్‌పుట్‌లు 1 అయినప్పుడు మాత్రమే అవుట్‌పుట్ 1 అవుతుంది."
+        }
+      ];
+    } else if (branch === "mech_civil") {
+      codingQuestions = [
+        {
+          id: 1,
+          section: "coding",
+          question: "Which graphical programming language is standard for programming Programmable Logic Controllers (PLCs)?",
+          questionTe: "ప్రోగ్రామబుల్ లాజిక్ కంట్రోలర్స్ (PLCs) ప్రోగ్రామింగ్ కోసం ప్రామాణికమైన గ్రాఫికల్ లాంగ్వేజ్ ఏది?",
+          options: ["Ladder Logic", "HTML", "CSS", "SQL"],
+          answerIndex: 0,
+          explanation: "Ladder Logic is the standard graphical language for PLCs in automation.",
+          explanationTe: "ఆటోమేషన్‌లో PLCs ప్రోగ్రామింగ్ కోసం లాడర్ లాజిక్ (Ladder Logic) ప్రామాణికమైనది."
+        },
+        {
+          id: 2,
+          section: "coding",
+          question: "Which programming language is commonly used for CAD scripting and mechanical calculation automation?",
+          questionTe: "CAD స్క్రిప్టింగ్ మరియు మెకానికల్ కాలిక్యులేషన్స్ ఆటోమేషన్ కోసం ఏ ప్రోగ్రామింగ్ లాంగ్వేజ్‌ని సాధారణంగా ఉపయోగిస్తారు?",
+          options: ["HTML", "Swift", "Python", "CSS"],
+          answerIndex: 2,
+          explanation: "Python is widely used for CAD scripting and automating engineering calculations.",
+          explanationTe: "CAD స్క్రిప్టింగ్ మరియు ఇంజనీరింగ్ లెక్కల ఆటోమేషన్ కోసం పైథాన్‌ను విస్తృతంగా ఉపయోగిస్తారు."
+        }
+      ];
+    } else {
+      // Default to CSE/IT
+      codingQuestions = [
+        {
+          id: 1,
+          section: "coding",
+          question: "Which of the following data structures operates on a LIFO (Last In First Out) principle?",
+          questionTe: "కింది వాటిలో ఏ డేటా స్ట్రక్చర్ LIFO (చివరగా వచ్చినది మొదట వెళ్తుంది) సూత్రంపై పనిచేస్తుంది?",
+          options: ["Queue", "Array", "Stack", "LinkedList"],
+          answerIndex: 2,
+          explanation: "A Stack pushes elements on top and pops them from the top, meaning the last added element is the first to be removed.",
+          explanationTe: "స్టాక్ లో పైభాగంలో ఎలిమెంట్స్ యాడ్ అవుతాయి మరియు అక్కడి నుండే తీసివేయబడతాయి. కాబట్టి చివరగా వచ్చింది మొదట బయటకు వస్తుంది."
+        },
+        {
+          id: 2,
+          section: "coding",
+          question: "What will be the output of print(type([])) in Python?",
+          questionTe: "పైథాన్‌లో print(type([])) యొక్క అవుట్‌పుట్ ఏమిటి?",
+          options: ["<class 'tuple'>", "<class 'list'>", "<class 'dict'>", "<class 'set'>"],
+          answerIndex: 1,
+          explanation: "The square brackets [] denote an empty list in Python, so its type is list.",
+          explanationTe: "పైథాన్‌లో స్క్వేర్ బ్రాకెట్స్ [] ఖాళీ లిస్ట్‌ని సూచిస్తాయి, కాబట్టి దాని టైప్ 'list' అవుతుంది."
+        }
+      ];
+    }
+
+    return [...codingQuestions, ...commonQuestions];
+  },
+
   // Project recommendations
   projects: [
     {

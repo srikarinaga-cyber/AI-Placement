@@ -93,6 +93,11 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
   const t = useCallback((key: string) => translate(lang, key), [lang]);
   const pageHeader = useMemo(() => getPageHeader(activeTab, lang, t), [activeTab, lang, t]);
 
+  const quizzes = useMemo(
+    () => appData.getQuizzes(interviewBranch),
+    [interviewBranch]
+  );
+
   const aptitudeQuestions = useMemo(
     () => appData.aptitudeQuestions.filter((q) => q.topic === aptitudeCategory),
     [aptitudeCategory]
@@ -419,7 +424,7 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
   };
 
   const nextQuizQuestion = () => {
-    if (quizIdx < appData.quizzes.length - 1) {
+    if (quizIdx < quizzes.length - 1) {
       setQuizIdx((i) => i + 1);
       setQuizSelected(null);
     } else {
@@ -427,15 +432,15 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
     }
   };
 
-  const quizCorrectCount = appData.quizzes.filter((q, i) => quizAnswers[i] === q.answerIndex).length;
-  const quizScorePercent = (quizCorrectCount / appData.quizzes.length) * 100;
+  const quizCorrectCount = quizzes.filter((q, i) => quizAnswers[i] === q.answerIndex).length;
+  const quizScorePercent = (quizCorrectCount / quizzes.length) * 100;
 
   const getQuizReport = () => {
     const codingCorrect =
-      quizAnswers[0] === appData.quizzes[0].answerIndex && quizAnswers[1] === appData.quizzes[1].answerIndex;
+      quizAnswers[0] === quizzes[0].answerIndex && quizAnswers[1] === quizzes[1].answerIndex;
     const aptCorrect =
-      quizAnswers[2] === appData.quizzes[2].answerIndex && quizAnswers[3] === appData.quizzes[3].answerIndex;
-    const commCorrect = quizAnswers[4] === appData.quizzes[4].answerIndex;
+      quizAnswers[2] === quizzes[2].answerIndex && quizAnswers[3] === quizzes[3].answerIndex;
+    const commCorrect = quizAnswers[4] === quizzes[4].answerIndex;
     const strengths: string[] = [];
     const gaps: string[] = [];
     const actions: string[] = [];
@@ -513,6 +518,7 @@ export function usePlacementMentor(user: User | null, logout: () => void) {
     chatInput,
     setChatInput,
     interviewAvgScore,
+    quizzes,
     quizPanel,
     quizIdx,
     quizSelected,

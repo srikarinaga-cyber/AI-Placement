@@ -42,7 +42,7 @@ export default function PlacementMentorApp({ app, user }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const quizReport = app.quizPanel === "report" ? app.getQuizReport() : null;
   const interviewReport = app.interviewPanel === "report" ? app.getInterviewReport() : null;
-  const currentQuiz = appData.quizzes[app.quizIdx];
+  const currentQuiz = app.quizzes[app.quizIdx];
 
   return (
     <>
@@ -550,9 +550,9 @@ export default function PlacementMentorApp({ app, user }: Props) {
                 <div className="card-glass quiz-container">
                   <div className="quiz-progress-info">
                     <span>Section: {currentQuiz.section.toUpperCase()}</span>
-                    <span>Question {app.quizIdx + 1} of {appData.quizzes.length}</span>
+                    <span>Question {app.quizIdx + 1} of {app.quizzes.length}</span>
                   </div>
-                  <div className="progress-bar-outer"><div className="progress-bar-inner" style={{ width: `${(app.quizIdx / appData.quizzes.length) * 100}%` }} /></div>
+                  <div className="progress-bar-outer"><div className="progress-bar-inner" style={{ width: `${(app.quizIdx / app.quizzes.length) * 100}%` }} /></div>
                   <div className="quiz-question-card">
                     <div className="quiz-question-text">{app.lang === "en" ? currentQuiz.question : currentQuiz.questionTe}</div>
                     <div className="quiz-options-list">
@@ -579,7 +579,7 @@ export default function PlacementMentorApp({ app, user }: Props) {
                   </div>
                   {app.quizSelected !== null && (
                     <button className="btn-primary" style={{ alignSelf: "flex-end" }} onClick={app.nextQuizQuestion}>
-                      {app.quizIdx === appData.quizzes.length - 1 ? (app.lang === "en" ? "Get Diagnostic Report" : "రిపోర్ట్ చూడండి") : "Next Question"}
+                      {app.quizIdx === app.quizzes.length - 1 ? (app.lang === "en" ? "Get Diagnostic Report" : "రిపోర్ట్ చూడండి") : "Next Question"}
                     </button>
                   )}
                 </div>
