@@ -5,8 +5,6 @@ import { appData } from "@/lib/data";
 import { translate, type Lang } from "@/lib/languages";
 import type { Branch } from "@/lib/languageMeta";
 import type { User } from "@/hooks/useAuth";
-
-const LANG_STORAGE_KEY = "placement_mentor_lang";
 import {
   getInterviewQuestions,
   getAvailableInterviewTypes,
@@ -20,6 +18,8 @@ import {
   getPageHeader,
   type TabId,
 } from "@/lib/constants";
+
+const LANG_STORAGE_KEY = "placement_mentor_lang";
 
 type Job = (typeof appData.jobAlerts)[number] & { applied: boolean };
 type ChatMsg = { sender: "interviewer" | "candidate"; text: string; textLocal?: string };
